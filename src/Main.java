@@ -1,5 +1,7 @@
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
 
+import javax.swing.*;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.Scanner;
 
@@ -45,6 +47,8 @@ public class Main
                     {
                         pokemons.insertIntoPoke(nome);
                         System.out.println("✅ Pokémon inserito con successo!");
+
+                        Visualizza(nome, false);
                     }
                     catch (NullPointerException e)
                     {
@@ -60,8 +64,35 @@ public class Main
                     }
                     break;
                 case "3":
+                    Visualizza("bye", true);
                     return;
             }
+        }
+    }
+
+    static void Visualizza(String nome, boolean chiusura)
+    {
+        try
+        {
+            String gifUrl = GIFAPI.GET(nome);
+            if (gifUrl == null) return;
+
+            URL url = new URL(gifUrl);
+
+            JFrame frame = new JFrame(nome);
+            Icon icon = new ImageIcon(url);
+            JLabel label = new JLabel(icon);
+
+            frame.add(label);
+            if (chiusura) frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.pack();
+            frame.setAlwaysOnTop(true);
+            frame.setVisible(true);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
         }
     }
 }

@@ -1,15 +1,10 @@
 import com.google.gson.*;
-
 import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.net.http.*;
 
 public class PokeAPI
 {
     private static final String BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
-    private static HttpClient client = HttpClient.newHttpClient();
-    private static Gson gson = new Gson();
 
     public static Pokemon GET(String nome)
     {
