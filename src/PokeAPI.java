@@ -1,4 +1,5 @@
-import com.google.gson.Gson;
+import com.google.gson.*;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -26,9 +27,16 @@ public class PokeAPI
 
             if (response.statusCode() == 200)
             {
+                Pokemon pokemon = new Pokemon();
                 String jsonResponse = response.body();
-                Gson gson = new Gson();
-                return gson.fromJson(jsonResponse, Pokemon.class);
+
+                JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
+                pokemon.setId(jsonObject.get("id").getAsInt());
+                pokemon.setName(jsonObject.get("name").getAsString());
+                JsonArray typesArray = jsonObject.getAsJsonArray("types");
+                for (JsonElement type : typesArray)
+                    pokemon.AggiungiTipo(type.getAsJsonObject().getAsJsonObject("type").get("name").getAsString());
+                return pokemon;
             }
         }
         catch (Exception e)

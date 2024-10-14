@@ -112,7 +112,7 @@ public class DB
                 {
                     result += rs.getString(i) + "\t";
                     //if the record is too short this if add a new tabulation
-                    if (rs.getString(i).length() < 8) result += "\t";
+                    if (rs.getString(i) != null && rs.getString(i).length() < 8) result += "\t";
                 }
                 result += "\n";
             }
@@ -135,7 +135,8 @@ public class DB
     public boolean insertIntoPoke(String nome)
     {
         int id;
-        ArrayList<Tipo> type;
+        String tipo1, tipo2;
+
         try
         {
             if (!conn.isValid(5)) return false;
@@ -150,8 +151,11 @@ public class DB
         {
             Pokemon pokemon = PokeAPI.GET(nome);
             id = pokemon.getId();
-            type = pokemon.getType();
-        } catch (Exception e)
+            tipo1 = pokemon.getType().get(0);
+            if (pokemon.getType().size() > 1) tipo2 = pokemon.getType().get(1);
+            else tipo2 = null;
+        }
+        catch (Exception e)
         {
             throw new RuntimeException(e);
         }
@@ -162,12 +166,8 @@ public class DB
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setInt(1, id);
             statement.setString(2, nome);
-            statement.setString(3, type.get(0).getName());
-            if (type.size() > 1)
-                statement.setString(4, type.get(1).getName());
-            else
-
-
+            statement.setString(3, tipo1);
+            statement.setString(4, tipo2);
             statement.executeUpdate();
         }
         catch (SQLException e)

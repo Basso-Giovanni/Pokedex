@@ -3,9 +3,17 @@ import java.util.ArrayList;
 public class Pokemon {
     int id;
     String name;
-    ArrayList<Tipo> types;
+    ArrayList<String> types;
 
-    public Pokemon(int id, String name) {
+    public Pokemon()
+    {
+        this.id = 0;
+        this.name = "";
+        this.types = new ArrayList<>();
+    }
+
+    public Pokemon(int id, String name)
+    {
         this.id = id;
         this.name = name;
         this.types = new ArrayList<>();
@@ -27,7 +35,12 @@ public class Pokemon {
         this.name = name;
     }
 
-    public ArrayList<Tipo> getType() {
+    public ArrayList<String> getType() {
         return types;
+    }
+
+    public void AggiungiTipo(String tipo)
+    {
+        this.types.add(tipo);
     }
 }
