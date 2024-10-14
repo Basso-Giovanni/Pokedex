@@ -1,5 +1,8 @@
+import com.mysql.cj.jdbc.exceptions.CommunicationsException;
+
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class DB
 {
@@ -19,19 +22,12 @@ public class DB
     /**
      * Represents a connection to a database.
      */
-    public DB(String address, String port, String databaseName, String username, String password)
+    public DB(String address, String port, String databaseName, String username, String password) throws SQLException
     {
         //stringa di connessione -> jdbc:mysql://127.0.0.1:3306/nomeDB
         String dbConnectionString = "jdbc:mysql://" + address + ":" + port + "/" + databaseName;
-        try
-        {
-            conn = DriverManager.getConnection(dbConnectionString, username, password);
-            if (conn != null) System.out.println("Connessione avvenuta 👌");
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+        conn = DriverManager.getConnection(dbConnectionString, username, password);
+        if (conn != null) System.out.println("Connessione avvenuta 👌");
     }
 
 
@@ -45,18 +41,10 @@ public class DB
      * @return a string representation of the selected data, formatted as tab-separated values
      * @throws SQLException if an SQL exception occurs while executing the query
      */
-    public String select(String what, String from, String where, String is)
+    public String select(String what, String from, String where, String is) throws SQLException
     {
         String result = "";
-        try
-        {
-            if (!conn.isValid(5)) return null;
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        if (!conn.isValid(5)) return null;
         String query = "SELECT " + what + " FROM " + from + " WHERE " + where + " = ?";
 
         try
@@ -89,17 +77,10 @@ public class DB
      * @return a string representation of the selected data, formatted as tab-separated values
      * @throws SQLException if an SQL exception occurs while executing the query
      */
-    public String selectALL(String from)
+    public String selectALL(String from) throws SQLException
     {
         String result = "";
-        try
-        {
-            if (!conn.isValid(5)) return null;
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
+        if (!conn.isValid(5)) return null;
         String query = "SELECT * FROM " + from;
 
         try
@@ -122,7 +103,6 @@ public class DB
             e.printStackTrace();
         }
 
-
         return result;
     }
 
@@ -132,32 +112,24 @@ public class DB
      * @param nome        the name of the person
      * @return true if the insert operation was successful, false otherwise
      */
-    public boolean insertIntoPoke(String nome)
+    public boolean insertIntoPoke(String nome) throws SQLException
     {
         int id;
         String tipo1, tipo2;
 
-        try
-        {
-            if (!conn.isValid(5)) return false;
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-            return false;
-        }
+        if (!conn.isValid(5)) return false;
 
         try
         {
-            Pokemon pokemon = PokeAPI.GET(nome);
+            Pokemon pokemon = PokeAPI.GET(nome.toLowerCase(Locale.ROOT));
             id = pokemon.getId();
             tipo1 = pokemon.getType().get(0);
             if (pokemon.getType().size() > 1) tipo2 = pokemon.getType().get(1);
             else tipo2 = null;
         }
-        catch (Exception e)
+        catch (NullPointerException e)
         {
-            throw new RuntimeException(e);
+            throw new NullPointerException();
         }
 
         String query = "INSERT INTO poke (id, nome, tipo1, tipo2) VALUES (?, ?, ?, ?)";
@@ -172,8 +144,7 @@ public class DB
         }
         catch (SQLException e)
         {
-            e.printStackTrace();
-            return false;
+            throw new SQLException();
         }
         return true;
     }
