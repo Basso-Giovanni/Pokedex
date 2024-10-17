@@ -109,7 +109,7 @@ public class DB
     /**
      * Inserts a new record into the "Poke" table in the database.
      *
-     * @param nome        the name of the person
+     * @param nome        the name of the pokèmon
      * @return true if the insert operation was successful, false otherwise
      */
     public boolean insertIntoPoke(String nome) throws SQLException
@@ -137,7 +137,7 @@ public class DB
         {
             PreparedStatement statement = conn.prepareStatement(query);
             statement.setInt(1, id);
-            statement.setString(2, nome);
+            statement.setString(2, nome.toUpperCase(Locale.ROOT));
             statement.setString(3, tipo1);
             statement.setString(4, tipo2);
             statement.executeUpdate();

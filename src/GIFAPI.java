@@ -10,8 +10,7 @@ public class GIFAPI
     private static String API_KEY = "uhRuwT82T4ImLobNaWU7jmVOtQAdJpww";
     private static String GIPHY_SEARCH_URL = "https://api.giphy.com/v1/gifs/search";
 
-    public static String GET(String nome)
-    {
+    public static String GET(String nome) throws Exception {
         try
         {
             String urlString = GIPHY_SEARCH_URL + "?api_key=" + API_KEY + "&q=" + nome + "&limit=1";
@@ -46,8 +45,7 @@ public class GIFAPI
 
         } catch (Exception e)
         {
-            e.printStackTrace();
+            throw new Exception();
         }
-        return null;
     }
 }
