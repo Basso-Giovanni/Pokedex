@@ -1,26 +1,30 @@
-import com.mysql.cj.jdbc.exceptions.CommunicationsException;
-
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Scanner;
 
 public class DB
 {
-
     /**
-     * Represents a connection to a database.
+     * Rappresenta una connessione ad un database.
      *
-     * The conn variable is used to establish a connection to a database and execute SQL queries.
+     * La variabile conn permette di stabilire la connessione con il database.
      *
-     * Methods in the DB class utilize the conn variable to execute queries such as SELECT, INSERT, UPDATE, and DELETE.
+     * I metodi di questa classe permettono di eseguire SELECT e INSERT in una tabella.
      *
-     * This variable should be initialized with a valid Connection object before using any of the database-related methods.
+     * La variabile conn dovrebbe essere inizializzata prima di eseguire qualsiasi query SQL.
      */
     private Connection conn;
 
 
     /**
-     * Represents a connection to a database.
+     * Costruttore per stabilire una connessione con il database.
+     *
+     * @param address       indica l'indirizzo IP del database
+     * @param port          indica la porta TCP/UDP del database
+     * @param databaseName  indica il nome del database
+     * @param username      indica il nome utente per accedere al database
+     * @param password      indica la password per accedere al database
+     * @throws SQLException se la connessione non può essere instaurata
      */
     public DB(String address, String port, String databaseName, String username, String password) throws SQLException
     {
@@ -32,14 +36,14 @@ public class DB
 
 
     /**
-     * Executes a SELECT query on the database.
+     * Esegue una query SELECT.
      *
-     * @param what   the column(s) to select
-     * @param from   the table(s) to select from
-     * @param where  the condition to filter the result
-     * @param is     the value to compare in the WHERE clause
-     * @return a string representation of the selected data, formatted as tab-separated values
-     * @throws SQLException if an SQL exception occurs while executing the query
+     * @param what   quali colonne prendere dalla tabella
+     * @param from   quale tabella prendere
+     * @param where  eventuali condizioni
+     * @param is     il valore da paragonare
+     * @return una stringa con il risultato della query formattata in tabella
+     * @throws SQLException se un'eccezione SQL viene lanciata durante la query
      */
     public String select(String what, String from, String where, String is) throws SQLException
     {
@@ -71,11 +75,11 @@ public class DB
     }
 
     /**
-     * Executes a SELECT query on the database to retrieve all records from a specified table.
+     * Esegue una query SELECT stampando tutta la tabella di un database.
      *
-     * @param from the name of the table to select from
-     * @return a string representation of the selected data, formatted as tab-separated values
-     * @throws SQLException if an SQL exception occurs while executing the query
+     * @param from  nome della tabella
+     * @return una stringa rappresentante il risultato della query, formattata in tabella
+     * @throws SQLException se un'eccezione SQL viene lanciata durante la query
      */
     public String selectALL(String from) throws SQLException
     {
@@ -107,10 +111,11 @@ public class DB
     }
 
     /**
-     * Inserts a new record into the "Poke" table in the database.
+     * Inserisce un nuovo record nella tabella Poke del database.
      *
-     * @param nome        the name of the pokèmon
-     * @return true if the insert operation was successful, false otherwise
+     * @param nome        nome del Pokémon
+     * @return true se l'inserimento va a buon fine, altrimenti false
+     * @throws SQLException se un'eccezione SQL viene lanciata durante la query
      */
     public boolean insertIntoPoke(String nome) throws SQLException
     {
@@ -126,11 +131,17 @@ public class DB
             tipo1 = pokemon.getType().get(0);
             if (pokemon.getType().size() > 1) tipo2 = pokemon.getType().get(1);
             else tipo2 = null;
+            System.out.println(pokemon.toString());
         }
         catch (NullPointerException e)
         {
             throw new NullPointerException();
         }
+
+        System.out.println("Vuoi aggiungere " + nome + "?\nS per confermare o qualsiasi tasto per annullare");
+        Scanner sc = new Scanner(System.in);
+        String resp = sc.nextLine();
+        if (!resp.toLowerCase(Locale.ROOT).equals("s")) return false;
 
         String query = "INSERT INTO poke (id, nome, tipo1, tipo2) VALUES (?, ?, ?, ?)";
         try

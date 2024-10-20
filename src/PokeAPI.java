@@ -4,8 +4,16 @@ import java.net.http.*;
 
 public class PokeAPI
 {
+    /**
+     * Classe per il GET delle informazioni dei Pokémon
+     */
     private static final String BASE_URL = "https://pokeapi.co/api/v2/pokemon/";
 
+    /**
+     * Metodo per ottenere le informazioni da PokeAPI (GET)
+     * @param nome  nome del Pokémon da cercare
+     * @return l'oggetto Pokemon rappresentante le informazioni del Pokemon
+     */
     public static Pokemon GET(String nome)
     {
         try

@@ -1,9 +1,13 @@
 import java.util.ArrayList;
 
-public class Pokemon {
-    int id;
-    String name;
-    ArrayList<String> types;
+public class Pokemon
+{
+    /**
+     * Classe rappresentante le informazioni dei Pokémon
+     */
+    int id; //id pokedex
+    String name; //nome del Pokémon
+    ArrayList<String> types; //lista con i due tipi del Pokémon
 
     public Pokemon()
     {
@@ -31,5 +35,13 @@ public class Pokemon {
     public void AggiungiTipo(String tipo)
     {
         this.types.add(tipo);
+    }
+
+    @Override
+    public String toString()
+    {
+        String out = id + "\t" + name + "\t";
+        for (String tipo : types) out += tipo + "\t";
+        return out;
     }
 }

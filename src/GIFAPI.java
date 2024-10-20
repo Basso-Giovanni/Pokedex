@@ -1,19 +1,26 @@
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.google.gson.*;
+import java.io.*;
+import java.net.*;
 
 public class GIFAPI
 {
-    private static String API_KEY = "uhRuwT82T4ImLobNaWU7jmVOtQAdJpww";
-    private static String GIPHY_SEARCH_URL = "https://api.giphy.com/v1/gifs/search";
+    /**
+     * Classe per il collegamento all'API di Giphy
+     */
+    private static String API_KEY = "uhRuwT82T4ImLobNaWU7jmVOtQAdJpww"; //token per l'uso dell'API
+    private static String GIPHY_SEARCH_URL = "https://api.giphy.com/v1/gifs/search"; //URL per l'uso dell'API
 
-    public static String GET(String nome) throws Exception {
+    /**
+     * Ottiene la GIF dall'API di Giphy (GET)
+     * @param nome  stringa da cercare
+     * @return l'URL della GIF di Giphy
+     * @throws Exception se viene lanciata un'eccezione
+     */
+    public static String GET(String nome) throws Exception
+    {
         try
         {
-            String urlString = GIPHY_SEARCH_URL + "?api_key=" + API_KEY + "&q=" + nome + "&limit=1";
+            String urlString = GIPHY_SEARCH_URL + "?api_key=" + API_KEY + "&q=" + nome + "&limit=1"; //l'ultima parte serve per aver solo un risultato
 
             URL url = new URL(urlString);
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -43,7 +50,8 @@ public class GIFAPI
 
             return gifUrl;
 
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             throw new Exception();
         }

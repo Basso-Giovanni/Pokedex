@@ -1,5 +1,4 @@
 import com.mysql.cj.jdbc.exceptions.CommunicationsException;
-
 import javax.swing.*;
 import java.net.URL;
 import java.sql.SQLException;
@@ -45,10 +44,12 @@ public class Main
 
                     try
                     {
-                        pokemons.insertIntoPoke(nome);
-                        System.out.println("✅ Pokémon inserito con successo!");
-
-                        Visualizza(nome, false);
+                        if (pokemons.insertIntoPoke(nome))
+                        {
+                            System.out.println("✅ Pokémon inserito con successo!");
+                            Visualizza(nome, false);
+                        }
+                        else System.out.println("⚠️ Il Pokémon non è stato inserito!");
                     }
                     catch (NullPointerException e)
                     {
@@ -70,6 +71,11 @@ public class Main
         }
     }
 
+    /**
+     * Metodo per visualizzare un form con la GIF cercata dall'API di Giphy
+     * @param nome      termine da cercare per l'API di Giphy
+     * @param chiusura  true se alla chiusura del form il codice deve arrestarsi, altrimenti false
+     */
     static void Visualizza(String nome, boolean chiusura)
     {
         try
